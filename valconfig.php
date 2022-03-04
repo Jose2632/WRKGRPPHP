@@ -1,6 +1,6 @@
 <?php
 //VALUES CONFIG
-$DB = 'directorio';
-$TABLA = 'contacto'; 
+$DB = '';
+$TABLA = ''; 
 //VALUES CONFIG
 ?>
