@@ -7,7 +7,6 @@
 	<!-- Bootstrap core CSS -->
 	<link href="resource/css/bootstrap.min.css" rel="stylesheet">
 	<!-- Custom styles for this template -->
-	<link href="resource/css/app.css" rel="stylesheet">
 	<link rel="stylesheet" href="resource/css/fonts/all.min.css">
 </head> 
 <body style="background: #B0B3D6;">
