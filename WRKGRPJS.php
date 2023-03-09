@@ -221,7 +221,7 @@
 		<div class="modal-dialog">
 		<div class="modal-content">
 		<div class="modal-header">
-		<h5 class="modal-title" id="INSmodal">INSERTAR EN '.$TABLA.'</h5>
+		<h5 class="modal-title" id="INSmodal">INSERTAR EN '.strtoupper($TABLA).'</h5>
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		<span aria-hidden="true">&times;</span>
 		</button>
@@ -247,7 +247,7 @@
 		<div class="modal-dialog">
 		<div class="modal-content">
 		<div class="modal-header">
-		<h5 class="modal-title" id="modalupdparms">ACTUALIZAR EN '.$TABLA.'</h5>
+		<h5 class="modal-title" id="modalupdparms">ACTUALIZAR EN '.strtoupper($TABLA).'</h5>
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		<span aria-hidden="true">&times;</span>
 		</button>
@@ -378,7 +378,7 @@
 		<div class="col-md-12">
 		<div class="card">
 		<center> 
-		<h3><strong><div class="card-header">LST '.$TABLA.' </div> </strong></h3>
+		<h3><strong><div class="card-header">LST '.strtoupper($TABLA).' </div> </strong></h3>
 		</center>
 		<table class="table-responsive-md table table-hover">
 		<thead>
