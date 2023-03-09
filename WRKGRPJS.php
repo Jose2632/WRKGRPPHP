@@ -137,6 +137,40 @@
 					<input type='number' class='form-control' id='update_$value' required>
 					</div>\n";
 				}
+				elseif (stristr($row['Type'], 'date')) {
+					$TYPES = $TYPES.''.'i';
+					$LABINP = $LABINP."
+					<td>$value</td>\n";
+					$LABINP2 = $LABINP2."
+					<td>$rowini$x$value$x$rowend</td>\n";
+					$LABINP3 = $LABINP3."
+					<div class='form-group'>
+					<label for='$value'>".ucfirst($value)."</label>
+					<input type='date' class='form-control' id='$value' required>
+					</div>\n";
+					$LABINP4 = $LABINP4."
+					<div class='form-group'>
+					<label for='$value'>".ucfirst($value)."</label>
+					<input type='date' class='form-control' id='update_$value' required>
+					</div>\n";
+				}
+				elseif (stristr($row['Type'], 'time')) {
+					$TYPES = $TYPES.''.'i';
+					$LABINP = $LABINP."
+					<td>$value</td>\n";
+					$LABINP2 = $LABINP2."
+					<td>$rowini$x$value$x$rowend</td>\n";
+					$LABINP3 = $LABINP3."
+					<div class='form-group'>
+					<label for='$value'>".ucfirst($value)."</label>
+					<input type='time' class='form-control' id='$value' required>
+					</div>\n";
+					$LABINP4 = $LABINP4."
+					<div class='form-group'>
+					<label for='$value'>".ucfirst($value)."</label>
+					<input type='time' class='form-control' id='update_$value' required>
+					</div>\n";
+				}
 				else {
 					$LABINP = $LABINP."
 					<td>$value</td>\n";
@@ -180,7 +214,6 @@
 		<!-- Bootstrap core CSS -->
 		<link href="resource/css/bootstrap.min.css" rel="stylesheet">
 		<!-- Custom styles for this template -->
-		<link href="resource/css/app.css" rel="stylesheet">
 		<link rel="stylesheet" href="resource/css/fonts/all.min.css">
 		</head> 
 		<body>
@@ -501,7 +534,23 @@
 					$LABINP = $LABINP."
 					<div class='form-group'>
 					<label for='$value'>$value</label>
-					<input type='text' class='form-control' name='$value' value=$rowini$x$value$x$rowend placeholder=$rowini$x$value$x$rowend disabled>
+					<input type='number' class='form-control' name='$value' value=$rowini$x$value$x$rowend placeholder=$rowini$x$value$x$rowend disabled>
+					</div>\n";
+				}
+				elseif (stristr($row['Type'], 'date')) {
+					$TYPES = $TYPES.''.'i';
+					$LABINP = $LABINP."
+					<div class='form-group'>
+					<label for='$value'>$value</label>
+					<input type='date' class='form-control' name='$value' value=$rowini$x$value$x$rowend placeholder=$rowini$x$value$x$rowend disabled>
+					</div>\n";
+				}
+				elseif (stristr($row['Type'], 'time')) {
+					$TYPES = $TYPES.''.'i';
+					$LABINP = $LABINP."
+					<div class='form-group'>
+					<label for='$value'>$value</label>
+					<input type='time' class='form-control' name='$value' value=$rowini$x$value$x$rowend placeholder=$rowini$x$value$x$rowend disabled>
 					</div>\n";
 				}
 				else {
@@ -549,7 +598,6 @@
 		<!-- Bootstrap core CSS -->
 		<link href="resource/css/bootstrap.min.css" rel="stylesheet">
 		<!-- Custom styles for this template -->
-		<link href="resource/css/app.css" rel="stylesheet">
 		<link rel="stylesheet" href="resource/css/fonts/all.min.css">
 		</head> 
 		<body>

@@ -66,7 +66,7 @@
 			<?php 
 			$CRUDS = scandir("./"); 
 			foreach ($CRUDS as $key => $value) { 
-				if (is_dir($value) && $value != "." && $value != ".." && $value != "resource") { ?>
+				if (is_dir($value) && $value != "." && $value != ".." && $value != "resource" && $value != ".git") { ?>
 					<div class="col-sm-3">
 						<div class="card">
 							<div class="card-body">

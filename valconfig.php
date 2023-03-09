@@ -1,6 +1,6 @@
 <?php
 //VALUES CONFIG
-$DB = 'encuesta';
-$TABLA = 'encuesta'; 
+$DB = 'pruebaswrk';
+$TABLA = 'pruebaswrk'; 
 //VALUES CONFIG
 ?>

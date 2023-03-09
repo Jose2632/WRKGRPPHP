@@ -110,6 +110,22 @@ function WRKHTMLINS ($mysqli, $DB, $TABLA) {
 				<input type='number' class='form-control' name='$value' required>
 				</div>\n";
 			}
+			elseif(stristr($row['Type'], 'date')) {
+				$TYPES = $TYPES.''.'s';
+				$LABINP = $LABINP."
+				<div class='form-group'>
+				<label for='$value'>$value</label>
+				<input type='date' class='form-control' name='$value' required>
+				</div>\n";
+			}
+			elseif(stristr($row['Type'], 'time')) {
+				$TYPES = $TYPES.''.'s';
+				$LABINP = $LABINP."
+				<div class='form-group'>
+				<label for='$value'>$value</label>
+				<input type='time' class='form-control' name='$value' required>
+				</div>\n";
+			}
 			else {
 				$TYPES = $TYPES.''.'s';
 				$LABINP = $LABINP."
@@ -138,7 +154,7 @@ function WRKHTMLINS ($mysqli, $DB, $TABLA) {
 	<!-- Bootstrap core CSS -->
 	<link href="resource/css/bootstrap.min.css" rel="stylesheet">
 	<!-- Custom styles for this template -->
-	<link href="resource/css/app.css" rel="stylesheet">
+	
 	<link rel="stylesheet" href="resource/css/fonts/all.min.css">
 	</head> 
 	<body>
@@ -259,7 +275,7 @@ function WRKHTMLLST ($mysqli, $DB, $TABLA) {
 	<!-- Bootstrap core CSS -->
 	<link href="resource/css/bootstrap.min.css" rel="stylesheet">
 	<!-- Custom styles for this template -->
-	<link href="resource/css/app.css" rel="stylesheet">
+	
 	<link rel="stylesheet" href="resource/css/fonts/all.min.css">
 	</head> 
 	<body>
@@ -373,6 +389,22 @@ function WRKHTMLLST ($mysqli, $DB, $TABLA) {
 							<input type='text' class='form-control' name='$value' value=$rowini$x$value$x$rowend placeholder=$rowini$x$value$x$rowend>
 							</div>\n";
 						}
+						elseif (stristr($row['Type'], 'date')) {
+							$TYPES = $TYPES.''.'i';
+							$LABINP = $LABINP."
+							<div class='form-group'>
+							<label for='$value'>$value</label>
+							<input type='date' class='form-control' name='$value' value=$rowini$x$value$x$rowend placeholder=$rowini$x$value$x$rowend>
+							</div>\n";
+						}
+						elseif (stristr($row['Type'], 'time')) {
+							$TYPES = $TYPES.''.'i';
+							$LABINP = $LABINP."
+							<div class='form-group'>
+							<label for='$value'>$value</label>
+							<input type='time' class='form-control' name='$value' value=$rowini$x$value$x$rowend placeholder=$rowini$x$value$x$rowend>
+							</div>\n";
+						}
 						else {
 							$TYPES = $TYPES.''.'s';
 							$LABINP = $LABINP."
@@ -419,7 +451,6 @@ function WRKHTMLLST ($mysqli, $DB, $TABLA) {
 				<!-- Bootstrap core CSS -->
 				<link href="resource/css/bootstrap.min.css" rel="stylesheet">
 				<!-- Custom styles for this template -->
-				<link href="resource/css/app.css" rel="stylesheet">
 				<link rel="stylesheet" href="resource/css/fonts/all.min.css">
 				</head> 
 				<body>
