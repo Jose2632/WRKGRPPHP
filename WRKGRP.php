@@ -7,18 +7,17 @@ if (mysqli_connect_errno()) {
 	exit();
 }
 
-if (mkdir("$DB", 0700)) {
-	mkdir("$DB/$TABLA", 0700);
-	mkdir("$DB/$TABLA/resource", 0700);
-	copyfolder("resource", "$DB/$TABLA/resource");
-}
-else {
+if (!mkdir("$DB/$TABLA", 0700, true)) {
 	echo "<script type='text/javascript'>
-	alert('Ya existe un CRUD generado con los siguientes parametros (DB: $DB - TABLA: $TABLA)');
-	window.location.href='index.php';
-	</script>";
+					alert('Ya existe un CRUD generado con los siguientes parametros (DB: $DB - TABLA: $TABLA)');
+					window.location.href='index.php';
+					</script>";
 	return;
 }
+
+mkdir("$DB/$TABLA", 0700);
+mkdir("$DB/$TABLA/resources", 0700);
+copyfolder("resources", "$DB/$TABLA/resources");
 
 $ruta = "$DB/$TABLA/";
 
@@ -149,18 +148,18 @@ function WRKHTMLINS ($mysqli, $DB, $TABLA) {
 	<head> 
 	<meta charset="utf-8">
 	<title>WRKGRP</title>
-	<link rel="shortcut icon" href="resource/img/icon/WRKICO.ico" />
+	<link rel="shortcut icon" href="resources/img/icon/WRKICO.ico" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<!-- Bootstrap core CSS -->
-	<link href="resource/css/bootstrap.min.css" rel="stylesheet">
+	<link href="resources/css/bootstrap.min.css" rel="stylesheet">
 	<!-- Custom styles for this template -->
 	
-	<link rel="stylesheet" href="resource/css/fonts/all.min.css">
+	<link rel="stylesheet" href="resources/css/fonts/all.min.css">
 	</head> 
 	<body>
 	<nav class="navbar navbar-expand-lg sticky-top navbar-light shadow p-3 bg-dark">
 	<div class="container">
-	<a> <img class="rounded" src="resource/img/WRK2.png" alt=""></a>
+	<a> <img class="rounded" src="resources/img/WRK2.png" alt=""></a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false">
 	<i class="fas fa-bars"></i>
 	</button>
@@ -193,8 +192,8 @@ function WRKHTMLINS ($mysqli, $DB, $TABLA) {
 	Todos los derechos reservados. <b>(Versión</b> <b>1.0)</b>
 	</center>
 	</footer>
-	<script src="resource/jquery/jquery-3.5.1.min.js"></script>
-	<script src="resource/js/bootstrap.bundle.min.js"></script>
+	<script src="resources/jquery/jquery-3.5.1.min.js"></script>
+	<script src="resources/js/bootstrap.bundle.min.js"></script>
 	</body>
 	</html>';	
 	$fp = fopen($name, 'w');
@@ -270,18 +269,18 @@ function WRKHTMLLST ($mysqli, $DB, $TABLA) {
 	<head> 
 	<meta charset="utf-8">
 	<title>WRKGRP</title>
-	<link rel="shortcut icon" href="resource/img/icon/WRKICO.ico" />
+	<link rel="shortcut icon" href="resources/img/icon/WRKICO.ico" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<!-- Bootstrap core CSS -->
-	<link href="resource/css/bootstrap.min.css" rel="stylesheet">
+	<link href="resources/css/bootstrap.min.css" rel="stylesheet">
 	<!-- Custom styles for this template -->
 	
-	<link rel="stylesheet" href="resource/css/fonts/all.min.css">
+	<link rel="stylesheet" href="resources/css/fonts/all.min.css">
 	</head> 
 	<body>
 	<nav class="navbar navbar-expand-lg sticky-top navbar-light shadow p-3 bg-dark">
 	<div class="container">
-	<a> <img class="rounded" src="resource/img/WRK2.png" alt=""></a>
+	<a> <img class="rounded" src="resources/img/WRK2.png" alt=""></a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false">
 	<i class="fas fa-bars"></i>
 	</button>
@@ -334,8 +333,8 @@ function WRKHTMLLST ($mysqli, $DB, $TABLA) {
 		Todos los derechos reservados. <b>(Versión</b> <b>1.0)</b>
 		</center>
 		</footer>
-		<script src="resource/jquery/jquery-3.5.1.min.js"></script>
-		<script src="resource/js/bootstrap.bundle.min.js"></script>
+		<script src="resources/jquery/jquery-3.5.1.min.js"></script>
+		<script src="resources/js/bootstrap.bundle.min.js"></script>
 		<script type="text/javascript">
 		jQuery(document).ready(function($) {
 			$(".clickable-row").click(function() {
@@ -446,17 +445,17 @@ function WRKHTMLLST ($mysqli, $DB, $TABLA) {
 				<head> 
 				<meta charset="utf-8">
 				<title>WRKGRP</title>
-				<link rel="shortcut icon" href="resource/img/icon/WRKICO.ico" />
+				<link rel="shortcut icon" href="resources/img/icon/WRKICO.ico" />
 				<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 				<!-- Bootstrap core CSS -->
-				<link href="resource/css/bootstrap.min.css" rel="stylesheet">
+				<link href="resources/css/bootstrap.min.css" rel="stylesheet">
 				<!-- Custom styles for this template -->
-				<link rel="stylesheet" href="resource/css/fonts/all.min.css">
+				<link rel="stylesheet" href="resources/css/fonts/all.min.css">
 				</head> 
 				<body>
 				<nav class="navbar navbar-expand-lg sticky-top navbar-light shadow p-3 bg-dark">
 				<div class="container">
-				<a> <img class="rounded" src="resource/img/WRK2.png" alt=""></a>
+				<a> <img class="rounded" src="resources/img/WRK2.png" alt=""></a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false">
 				<i class="fas fa-bars"></i>
 				</button>
@@ -490,8 +489,8 @@ function WRKHTMLLST ($mysqli, $DB, $TABLA) {
 				Todos los derechos reservados. <b>(Versión</b> <b>1.0)</b>
 				</center>
 				</footer>
-				<script src="resource/jquery/jquery-3.5.1.min.js"></script>
-				<script src="resource/js/bootstrap.bundle.min.js"></script>
+				<script src="resources/jquery/jquery-3.5.1.min.js"></script>
+				<script src="resources/js/bootstrap.bundle.min.js"></script>
 				</body>
 				</html>';
 				$fp = fopen($name, 'w');

@@ -2,17 +2,17 @@
 <head> 
 	<meta charset="utf-8">
 	<title>WRKGRP</title>
-	<link rel="shortcut icon" href="resource/img/icon/WRKICO.ico" />
+	<link rel="shortcut icon" href="resources/img/icon/WRKICO.ico" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<!-- Bootstrap core CSS -->
-	<link href="resource/css/bootstrap.min.css" rel="stylesheet">
+	<link href="resources/css/bootstrap.min.css" rel="stylesheet">
 	<!-- Custom styles for this template -->
-	<link rel="stylesheet" href="resource/css/fonts/all.min.css">
+	<link rel="stylesheet" href="resources/css/fonts/all.min.css">
 </head> 
 <body style="background: #B0B3D6;">
 	<nav class="navbar navbar-expand-lg sticky-top navbar-light shadow p-3 bg-dark">
 		<div class="container">
-			<a> <img class="rounded" src="resource/img/WRK2.png" alt=""></a>
+			<a> <img class="rounded" src="resources/img/WRK2.png" alt=""></a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false">
 				<i class="fas fa-bars"></i>
 			</button>
@@ -65,13 +65,13 @@
 			<?php 
 			$CRUDS = scandir("./"); 
 			foreach ($CRUDS as $key => $value) { 
-				if (is_dir($value) && $value != "." && $value != ".." && $value != "resource" && $value != ".git") { ?>
+				if (is_dir($value) && $value != "." && $value != ".." && $value != "resources" && $value != ".git") { ?>
 					<div class="col-sm-3">
 						<div class="card">
 							<div class="card-body">
 								<h5 class="card-title"><?=$value ?></h5>
-								<a href="<?php $dir = scandir($value.'//'); echo $value."/".$dir[2]; ?>" class="btn btn-primary">Ir al CRUD</a>
-								<a href="<?php $dir = scandir($value.'//'); echo "bin.php?idcrud=".$value; ?>" class="btn btn-danger">Eliminar CRUD</a>
+								<a href="<?php $dir = scandir($value.'//'); echo $value."/"; ?>" class="btn btn-primary">Ver Folder</a>
+								<a href="<?php $dir = scandir($value.'//'); echo "bin.php?idcrud=".$value; ?>" class="btn btn-danger">Eliminar Folder</a>
 							</div>
 						</div>
 						<hr>
