@@ -530,7 +530,16 @@ function WRKHTMLLST ($mysqli, $DB, $TABLA) {
 				$plantillaphp = '<?php
 				include "dbround.php";
 				if (isset($_POST["INSPARMS"])) {
-					extract($_POST);
+
+					if (valparm($_POST) == false) {
+		echo "<script type='."'text/javascript'".'>
+					alert('."'Error en el análisis de los datos recibidos, por favor revisar campos.'".');
+					window.location.href='."'INS$TABLA.html'".';
+					</script>";
+					return;
+	}
+
+					extract(sanparm($_POST, $mysqli));
 					$stmt = $mysqli->prepare("INSERT INTO '.$TABLA.'('.$BUFIN.') VALUES ('.$PARMSR.')");
 					$stmt->bind_param('."'".''.$TYPES.''."'".', '.$BUFINVAR.');
 					$stmt->execute();
@@ -539,7 +548,33 @@ function WRKHTMLLST ($mysqli, $DB, $TABLA) {
 					alert('."'INSERTAR EJECUTADO'".');
 					window.location.href='."'INS$TABLA.html'".';
 					</script>";
-				} ?>';
+				} 
+
+
+				function valparm($PARMS) {
+	foreach ($PARMS as $key => $value) {
+		if ((empty($value) && !is_numeric($value)) || $value == "") {
+			return false;
+		}
+	}
+	return true;
+} 
+
+function sanparm($params, $mysqli) {
+  foreach ($params as $key => &$value) {
+    // Filtrar y limpiar el valor recibido
+    $value = filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
+
+    // Limpieza adicional del valor para evitar inyecciones SQL
+    $value = mysqli_real_escape_string($mysqli, $value);
+  }
+
+  // Devolver el array modificado
+  return $params;
+}
+
+
+				?>';
 				$fp = fopen($name, 'w');
 				fwrite($fp,  $plantillaphp);
 				fclose($fp);
@@ -605,7 +640,18 @@ function WRKHTMLLST ($mysqli, $DB, $TABLA) {
 				<?php
 				include "dbround.php";
 				if (isset($_POST["UPDPARMS"])) {
-					extract($_POST);
+
+						if (valparm($_POST) == false) {
+							$id = $_POST['."'".''.$primarykey.''."'".'];
+							echo "<script type='."'text/javascript'".'>
+					alert('."'Error en el análisis de los datos recibidos, por favor revisar campos.'".');
+					window.location.href='."'DSP$TABLA.php?$primarykey=$"."id".''."'".';
+					</script>";
+					return;
+		
+	}
+
+					extract(sanparm($_POST, $mysqli));
 					$stmt = $mysqli->prepare("SELECT * FROM '.$TABLA.' WHERE '.$primarykey.' = ?");
 					$stmt->bind_param ('."'".''.$TYPEPKEY.''."'".', $'.$primarykeyvalue.');
 					$stmt->execute();
@@ -623,7 +669,33 @@ function WRKHTMLLST ($mysqli, $DB, $TABLA) {
 					alert('."'ACTUALIZAR EJECUTADO'".');
 					window.location.href='."'DSP$TABLA.php?$primarykey=".'$'.""."$primarykey'".';
 					</script>";
-					} ?>
+					} 
+
+
+					function valparm($PARMS) {
+	foreach ($PARMS as $key => $value) {
+		if ((empty($value) && !is_numeric($value)) || $value == "") {
+			return false;
+		}
+	}
+	return true;
+} 
+
+function sanparm($params, $mysqli) {
+  foreach ($params as $key => &$value) {
+    // Filtrar y limpiar el valor recibido
+    $value = filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
+
+    // Limpieza adicional del valor para evitar inyecciones SQL
+    $value = mysqli_real_escape_string($mysqli, $value);
+  }
+
+  // Devolver el array modificado
+  return $params;
+}
+
+
+					?>
 					';
 					$fp = fopen($name, 'w');
 					fwrite($fp,  $plantillaphp);

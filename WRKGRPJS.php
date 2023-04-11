@@ -682,7 +682,7 @@
 				exit;
 			}
 			else {
-				extract($_POST);
+				extract(sanparm($_POST, $mysqli));
 				$stmt = $mysqli->prepare("INSERT INTO '.$TABLA.'('.$BUFIN.') VALUES ('.$PARMSR.')");
 				$stmt->bind_param('."'".''.$TYPES.''."'".', '.$BUFINVAR.');
 				$stmt->execute();
@@ -693,17 +693,26 @@
 			}
 		} 
 		function valparm($PARMS) {
-			foreach ($PARMS as $key => $value) {
-				if ($value == "" || $value == null) {
-					$varmsg = false;
-					break;
-				}
-				else {
-					$varmsg = true;
-				}
-			}
-			return $varmsg;
+		foreach ($PARMS as $key => $value) {
+		if ((empty($value) && !is_numeric($value)) || $value == "") {
+			return false;
+		}
+		}
+		return true;
 		} 
+
+		function sanparm($params, $mysqli) {
+ 	 	foreach ($params as $key => &$value) {
+   		 // Filtrar y limpiar el valor recibido
+    	$value = filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
+
+   		 // Limpieza adicional del valor para evitar inyecciones SQL
+    	$value = mysqli_real_escape_string($mysqli, $value);
+  		}
+
+ 		 // Devolver el array modificado
+ 		 return $params;
+		}
 		?>';
 		$fp = fopen($name, 'w');
 		fwrite($fp,  $plantillaphp);
@@ -771,7 +780,14 @@
 		<?php
 		include "dbround.php";
 		if (isset($_POST["UPDPARMS"])) {
-			extract($_POST);
+			
+			if (valparm($_POST) == false) {
+		$data = ["error"=> 1,"msg"=>"Error, Revisar Campos"];
+		echo json_encode($data);
+		exit;
+	}
+
+			extract(sanparm($_POST, $mysqli));
 			$stmt = $mysqli->prepare("SELECT * FROM '.$TABLA.' WHERE '.$primarykey.' = ?");
 			$stmt->bind_param ('."'".''.$TYPEPKEY.''."'".', $'.$primarykeyvalue.');
 			$stmt->execute();
@@ -785,7 +801,32 @@
 			$stmt->bind_param ('."'".''.''.$TYPES.''.''."'".','.$BUFINVAR.');
 			$stmt->execute();
 			mysqli_stmt_close($stmt);
-		} ?>';
+		} 
+
+		function valparm($PARMS) {
+	foreach ($PARMS as $key => $value) {
+		if ((empty($value) && !is_numeric($value)) || $value == "") {
+			return false;
+		}
+	}
+	return true;
+} 
+
+function sanparm($params, $mysqli) {
+  foreach ($params as $key => &$value) {
+    // Filtrar y limpiar el valor recibido
+    $value = filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
+
+    // Limpieza adicional del valor para evitar inyecciones SQL
+    $value = mysqli_real_escape_string($mysqli, $value);
+  }
+
+  // Devolver el array modificado
+  return $params;
+
+
+
+		?>';
 		$fp = fopen($name, 'w');
 		fwrite($fp,  $plantillaphp);
 		fclose($fp);
