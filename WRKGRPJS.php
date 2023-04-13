@@ -391,12 +391,15 @@
 			$data.= '.$x.'<tr>
 			'.$LABINP2.'
 			<td> 
+			<div class="btn-group" role="group" aria-label="acciones">
+
 			<a href="DSP'.$TABLA.'.php?'.$primarykeyvalue.'='.$x2.$rowini.''.$x.''.$primarykeyvalue.''.$x.''.$rowend.$x3.'" class="btn btn-white" title="Ver"><i class="fa fa-eye" aria-hidden="true"></i> 
 			</a>
 			<a onclick="getparms('.$x2.$rowini.''.$x.''.$primarykeyvalue.''.$x.''.$rowend.$x3.')" class="btn btn-primary" title="Editar"><i class="fa fa-edit" aria-hidden="true"></i> 
 			</a>
 			<a onclick="dltparms('.$x2.$rowini.''.$x.''.$primarykeyvalue.''.$x.''.$rowend.$x3.')" class="btn btn-dark" title="Eliminar"><i class="fa fa-trash" aria-hidden="true"></i> 
 			</a>
+			</div>
 			</td>
 			</tr>'.$x.';
 		}					
