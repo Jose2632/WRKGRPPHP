@@ -170,6 +170,22 @@
 					<input type='time' class='form-control' id='update_$value' required>
 					</div>\n";
 				}
+				elseif (stristr($row['Type'], 'text')){
+					$LABINP = $LABINP."
+					<td>$value</td>\n";
+					$LABINP2 = $LABINP2."
+					<td>$rowini$x$value$x$rowend</td>\n";
+					$LABINP3 = $LABINP3."
+					<div class='form-group'>
+					<label for='$value'>".ucfirst($value)."</label>
+					<textarea class='form-control' id='$value' required></textarea>
+					</div>\n";
+					$LABINP4 = $LABINP4."
+					<div class='form-group'>
+					<label for='$value'>".ucfirst($value)."</label>
+					<textarea class='form-control' id='update_$value' required></textarea>
+					</div>\n";
+				}
 				else {
 					$LABINP = $LABINP."
 					<td>$value</td>\n";
@@ -826,6 +842,7 @@ function sanparm($params, $mysqli) {
 
   // Devolver el array modificado
   return $params;
+}
 
 
 
