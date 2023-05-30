@@ -1,6 +1,6 @@
 <?php
 include_once 'valconfig.php';
-error_reporting(0);
+//error_reporting(0);
 $mysqli = new mysqli("localhost", "root", "", "$DB");
 if (mysqli_connect_errno()) {
 	printf("Fall¨® la conexi¨®n: %s\n", mysqli_connect_error());
@@ -9,9 +9,9 @@ if (mysqli_connect_errno()) {
 
 if (!mkdir("$DB/$TABLA", 0700, true)) {
 	echo "<script type='text/javascript'>
-					alert('Ya existe un CRUD generado con los siguientes parametros (DB: $DB - TABLA: $TABLA)');
-					window.location.href='index.php';
-					</script>";
+	alert('Ya existe un CRUD generado con los siguientes parametros (DB: $DB - TABLA: $TABLA)');
+	window.location.href='index.php';
+	</script>";
 	return;
 }
 
@@ -46,7 +46,7 @@ for ($i=0; $i <= count($WRKGRP)-1; $i++) {
 		alert('Fallos encontrados en la generación, por favor revisar la configuración y vuelva a intentarlo');
 		window.location.href='index.php';
 		</script>";
-		die;
+		exit();
 		default:
 		echo "<script type='text/javascript'>
 		alert('CRUD GENERADO CORRECTAMENTE');
@@ -261,9 +261,17 @@ function WRKHTMLLST ($mysqli, $DB, $TABLA) {
 	$plantillahtml = '
 	<?php 
 	include "dbround.php";
-	$stmt = $mysqli->prepare("SELECT * FROM '.$TABLA.'");
+
+	$results_per_page = 10;
+	$current_page = isset($_GET["page"]) ? $_GET["page"] : 1;
+	$start_index = ($current_page - 1) * $results_per_page;
+	$end_index = $start_index + $results_per_page;
+	$stmt = $mysqli->prepare("SELECT * FROM '.$TABLA.' LIMIT ?, ?");
+	$stmt->bind_param("ii", $start_index, $results_per_page);
 	$stmt->execute();
 	$result = $stmt->get_result();
+	$total_results = $result->num_rows;
+	$total_pages = ceil($total_results / $results_per_page);
 	?>
 	<html>
 	<head> 
@@ -306,7 +314,7 @@ function WRKHTMLLST ($mysqli, $DB, $TABLA) {
 	<center> 
 	<h3><strong><div class="card-header">LST '.strtoupper($TABLA).' </div> </strong></h3>
 	</center>
-	<table class="table-responsive-xl table table-hover">
+	<table class="table table-responsive">
 	<thead>
 	<tr>    
 	'.$LABINP.'
@@ -385,7 +393,7 @@ function WRKHTMLLST ($mysqli, $DB, $TABLA) {
 							$LABINP = $LABINP."
 							<div class='form-group'>
 							<label for='$value'>$value</label>
-							<input type='text' class='form-control' name='$value' value=$rowini$x$value$x$rowend placeholder=$rowini$x$value$x$rowend>
+							<input type='number' class='form-control' name='$value' value=$rowini$x$value$x$rowend placeholder=$rowini$x$value$x$rowend>
 							</div>\n";
 						}
 						elseif (stristr($row['Type'], 'date')) {
@@ -532,12 +540,12 @@ function WRKHTMLLST ($mysqli, $DB, $TABLA) {
 				if (isset($_POST["INSPARMS"])) {
 
 					if (valparm($_POST) == false) {
-		echo "<script type='."'text/javascript'".'>
-					alert('."'Error en el análisis de los datos recibidos, por favor revisar campos.'".');
-					window.location.href='."'INS$TABLA.html'".';
-					</script>";
-					return;
-	}
+						echo "<script type='."'text/javascript'".'>
+						alert('."'Error en el análisis de los datos recibidos, por favor revisar campos.'".');
+						window.location.href='."'INS$TABLA.html'".';
+						</script>";
+						return;
+					}
 
 					extract(sanparm($_POST, $mysqli));
 					$stmt = $mysqli->prepare("INSERT INTO '.$TABLA.'('.$BUFIN.') VALUES ('.$PARMSR.')");
@@ -552,26 +560,26 @@ function WRKHTMLLST ($mysqli, $DB, $TABLA) {
 
 
 				function valparm($PARMS) {
-	foreach ($PARMS as $key => $value) {
-		if ((empty($value) && !is_numeric($value)) || $value == "") {
-			return false;
-		}
-	}
-	return true;
-} 
+					foreach ($PARMS as $key => $value) {
+						if ((empty($value) && !is_numeric($value)) || $value == "") {
+							return false;
+						}
+					}
+					return true;
+				} 
 
-function sanparm($params, $mysqli) {
-  foreach ($params as $key => &$value) {
+				function sanparm($params, $mysqli) {
+					foreach ($params as $key => &$value) {
     // Filtrar y limpiar el valor recibido
-    $value = filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
+						$value = filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
 
     // Limpieza adicional del valor para evitar inyecciones SQL
-    $value = mysqli_real_escape_string($mysqli, $value);
-  }
+						$value = mysqli_real_escape_string($mysqli, $value);
+					}
 
   // Devolver el array modificado
-  return $params;
-}
+					return $params;
+				}
 
 
 				?>';
@@ -641,15 +649,15 @@ function sanparm($params, $mysqli) {
 				include "dbround.php";
 				if (isset($_POST["UPDPARMS"])) {
 
-						if (valparm($_POST) == false) {
-							$id = $_POST['."'".''.$primarykey.''."'".'];
-							echo "<script type='."'text/javascript'".'>
-					alert('."'Error en el análisis de los datos recibidos, por favor revisar campos.'".');
-					window.location.href='."'DSP$TABLA.php?$primarykey=$"."id".''."'".';
-					</script>";
-					return;
-		
-	}
+					if (valparm($_POST) == false) {
+						$id = $_POST['."'".''.$primarykey.''."'".'];
+						echo "<script type='."'text/javascript'".'>
+						alert('."'Error en el análisis de los datos recibidos, por favor revisar campos.'".');
+						window.location.href='."'DSP$TABLA.php?$primarykey=$"."id".''."'".';
+						</script>";
+						return;
+
+					}
 
 					extract(sanparm($_POST, $mysqli));
 					$stmt = $mysqli->prepare("SELECT * FROM '.$TABLA.' WHERE '.$primarykey.' = ?");
@@ -669,33 +677,109 @@ function sanparm($params, $mysqli) {
 					alert('."'ACTUALIZAR EJECUTADO'".');
 					window.location.href='."'DSP$TABLA.php?$primarykey=".'$'.""."$primarykey'".';
 					</script>";
-					} 
+				} 
 
 
-					function valparm($PARMS) {
-	foreach ($PARMS as $key => $value) {
-		if ((empty($value) && !is_numeric($value)) || $value == "") {
-			return false;
-		}
-	}
-	return true;
-} 
+				function valparm($PARMS) {
+					foreach ($PARMS as $key => $value) {
+						if ((empty($value) && !is_numeric($value)) || $value == "") {
+							return false;
+						}
+					}
+					return true;
+				} 
 
-function sanparm($params, $mysqli) {
-  foreach ($params as $key => &$value) {
+				function sanparm($params, $mysqli) {
+					foreach ($params as $key => &$value) {
     // Filtrar y limpiar el valor recibido
-    $value = filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
+						$value = filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
 
     // Limpieza adicional del valor para evitar inyecciones SQL
-    $value = mysqli_real_escape_string($mysqli, $value);
-  }
+						$value = mysqli_real_escape_string($mysqli, $value);
+					}
 
   // Devolver el array modificado
-  return $params;
-}
+					return $params;
+				}
 
 
-					?>
+				?>
+				';
+				$fp = fopen($name, 'w');
+				fwrite($fp,  $plantillaphp);
+				fclose($fp);
+				return true;
+			}
+
+			function WRKPHPDLT ($mysqli, $DB, $TABLA) {
+				$name="$DB/$TABLA/DLT$TABLA.php";
+				$BUFIN = '';
+				$BUFINVAR = '';
+				$BUFINVAR2 = '';
+				$BUFINVAR3 = '';
+				$BUFINPARM = '';
+				$PARMSR = '';
+				$TYPES = '';
+				$stmt = $mysqli->prepare("SHOW COLUMNS FROM $TABLA FROM $DB");
+				$stmt->execute();
+				$result = $stmt->get_result();
+				while ($row = $result->fetch_assoc()) {
+					if ($row['Key'] == 'PRI' && $row['Extra'] == 'auto_increment') {
+						$primarykey = $row['Field'];
+						$primarykeyvalue = $row['Field'];
+						$PARMSR = $PARMSR.',?';
+						if (stristr($row['Type'], 'int')) {
+							$TYPEKEY = 'i';
+						}
+						else {
+							$TYPEKEY = 's';
+						}
+					}
+					elseif ($row['Key'] == 'PRI') {
+						$primarykey = $row['Field'];
+						$primarykeyvalue = $row['Field'];
+						$PARMSR = $PARMSR.',?';
+						if (stristr($row['Type'], 'int')) {
+							$TYPEKEY = 'i';
+						}
+						else {
+							$TYPEKEY = 's';
+						}		
+					}
+					else  {
+						if (stristr($row['Type'], 'int')) {
+							$TYPES = $TYPES.''.'i';
+						}
+						else {
+							$TYPES = $TYPES.''.'s';
+						}	
+						$BUFIN = $BUFIN.','.$row['Field'].'= ?';
+						$BUFINVAR = $BUFINVAR.','.'$'.$row['Field'];
+						$BUFINVAR2 = $BUFINVAR2.'$'.$row['Field'].'db='.'$row["'.$row['Field'].'"];'."\n";
+						$BUFINVAR3 = $BUFINVAR3.''.'if($'.$row['Field'].'db=='.'$'.$row['Field'].'){ $'.$row['Field'].' = $'.$row['Field'].'db;}'."\n";
+						$PARMSR = $PARMSR.',?';
+					}
+				}
+				$BUFIN = substr($BUFIN, 1);
+				$BUFINVAR = substr($BUFINVAR, 1);
+				$BUFINVAR2 = substr($BUFINVAR2, 0,-1);
+				$PARMSR = substr($PARMSR, 1);
+				$TYPES = $TYPES.''.'i';
+				$BUFINVAR = $BUFINVAR.','.'$'.$primarykey;
+				$plantillaphp = '
+				<?php
+				include "dbround.php";
+				if (isset($_GET["'.$primarykey.'"])) {
+					$'.$primarykey.' = $_GET["'.$primarykey.'"];
+					$stmt = $mysqli->prepare("DELETE FROM '.$TABLA.' WHERE '.$primarykey.' = ?");
+					$stmt->bind_param ('."'".''.''.$TYPEKEY.''.''."'".',$'.$primarykey.');
+					$stmt->execute();
+					mysqli_stmt_close($stmt);
+					echo "<script type='."'text/javascript'".'>
+					alert('."'ELIMINAR EJECUTADO'".');
+					window.location.href='."'LST$TABLA.php'".';
+					</script>";
+					} ?>
 					';
 					$fp = fopen($name, 'w');
 					fwrite($fp,  $plantillaphp);
@@ -703,101 +787,25 @@ function sanparm($params, $mysqli) {
 					return true;
 				}
 
-				function WRKPHPDLT ($mysqli, $DB, $TABLA) {
-					$name="$DB/$TABLA/DLT$TABLA.php";
-					$BUFIN = '';
-					$BUFINVAR = '';
-					$BUFINVAR2 = '';
-					$BUFINVAR3 = '';
-					$BUFINPARM = '';
-					$PARMSR = '';
-					$TYPES = '';
-					$stmt = $mysqli->prepare("SHOW COLUMNS FROM $TABLA FROM $DB");
-					$stmt->execute();
-					$result = $stmt->get_result();
-					while ($row = $result->fetch_assoc()) {
-						if ($row['Key'] == 'PRI' && $row['Extra'] == 'auto_increment') {
-							$primarykey = $row['Field'];
-							$primarykeyvalue = $row['Field'];
-							$PARMSR = $PARMSR.',?';
-							if (stristr($row['Type'], 'int')) {
-								$TYPEKEY = 'i';
+				function copyfolder( $source, $target ) {
+					if ( is_dir( $source ) ) {
+						@mkdir( $target );
+						$d = dir( $source );
+						while ( FALSE !== ( $entry = $d->read() ) ) {
+							if ( $entry == '.' || $entry == '..' ) {
+								continue;
 							}
-							else {
-								$TYPEKEY = 's';
+							$Entry = $source . '/' . $entry; 
+							if ( is_dir( $Entry ) ) {
+								copyfolder( $Entry, $target . '/' . $entry );
+								continue;
 							}
+							copy( $Entry, $target . '/' . $entry );
 						}
-						elseif ($row['Key'] == 'PRI') {
-							$primarykey = $row['Field'];
-							$primarykeyvalue = $row['Field'];
-							$PARMSR = $PARMSR.',?';
-							if (stristr($row['Type'], 'int')) {
-								$TYPEKEY = 'i';
-							}
-							else {
-								$TYPEKEY = 's';
-							}		
-						}
-						else  {
-							if (stristr($row['Type'], 'int')) {
-								$TYPES = $TYPES.''.'i';
-							}
-							else {
-								$TYPES = $TYPES.''.'s';
-							}	
-							$BUFIN = $BUFIN.','.$row['Field'].'= ?';
-							$BUFINVAR = $BUFINVAR.','.'$'.$row['Field'];
-							$BUFINVAR2 = $BUFINVAR2.'$'.$row['Field'].'db='.'$row["'.$row['Field'].'"];'."\n";
-							$BUFINVAR3 = $BUFINVAR3.''.'if($'.$row['Field'].'db=='.'$'.$row['Field'].'){ $'.$row['Field'].' = $'.$row['Field'].'db;}'."\n";
-							$PARMSR = $PARMSR.',?';
-						}
-					}
-					$BUFIN = substr($BUFIN, 1);
-					$BUFINVAR = substr($BUFINVAR, 1);
-					$BUFINVAR2 = substr($BUFINVAR2, 0,-1);
-					$PARMSR = substr($PARMSR, 1);
-					$TYPES = $TYPES.''.'i';
-					$BUFINVAR = $BUFINVAR.','.'$'.$primarykey;
-					$plantillaphp = '
-					<?php
-					include "dbround.php";
-					if (isset($_GET["'.$primarykey.'"])) {
-						$'.$primarykey.' = $_GET["'.$primarykey.'"];
-						$stmt = $mysqli->prepare("DELETE FROM '.$TABLA.' WHERE '.$primarykey.' = ?");
-						$stmt->bind_param ('."'".''.''.$TYPEKEY.''.''."'".',$'.$primarykey.');
-						$stmt->execute();
-						mysqli_stmt_close($stmt);
-						echo "<script type='."'text/javascript'".'>
-						alert('."'ELIMINAR EJECUTADO'".');
-						window.location.href='."'LST$TABLA.php'".';
-						</script>";
-						} ?>
-						';
-						$fp = fopen($name, 'w');
-						fwrite($fp,  $plantillaphp);
-						fclose($fp);
-						return true;
-					}
 
-					function copyfolder( $source, $target ) {
-						if ( is_dir( $source ) ) {
-							@mkdir( $target );
-							$d = dir( $source );
-							while ( FALSE !== ( $entry = $d->read() ) ) {
-								if ( $entry == '.' || $entry == '..' ) {
-									continue;
-								}
-								$Entry = $source . '/' . $entry; 
-								if ( is_dir( $Entry ) ) {
-									copyfolder( $Entry, $target . '/' . $entry );
-									continue;
-								}
-								copy( $Entry, $target . '/' . $entry );
-							}
-							
-							$d->close();
-						}else {
-							copy( $source, $target );
-						}
+						$d->close();
+					}else {
+						copy( $source, $target );
 					}
-				?>
+				}
+			?>

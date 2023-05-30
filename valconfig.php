@@ -1,6 +1,6 @@
 <?php
 //VALUES CONFIG
-$DB = 'database';
-$TABLA = 'table'; 
+$DB = 'db_example';
+$TABLA = 'table_example'; 
 //VALUES CONFIG
 ?>
