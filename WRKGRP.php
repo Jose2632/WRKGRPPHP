@@ -266,11 +266,17 @@ function WRKHTMLLST ($mysqli, $DB, $TABLA) {
 	$current_page = isset($_GET["page"]) ? $_GET["page"] : 1;
 	$start_index = ($current_page - 1) * $results_per_page;
 	$end_index = $start_index + $results_per_page;
+
+	$stmt = $mysqli->prepare("SELECT * FROM '.$TABLA.'");
+	$stmt->execute();
+	$resultpages = $stmt->get_result();
+
 	$stmt = $mysqli->prepare("SELECT * FROM '.$TABLA.' LIMIT ?, ?");
 	$stmt->bind_param("ii", $start_index, $results_per_page);
 	$stmt->execute();
 	$result = $stmt->get_result();
-	$total_results = $result->num_rows;
+	
+	$total_results = $resultpages ->num_rows;
 	$total_pages = ceil($total_results / $results_per_page);
 	?>
 	<html>
@@ -331,7 +337,38 @@ function WRKHTMLLST ($mysqli, $DB, $TABLA) {
 		<?php } ?>
 		</tbody>
 		</table>
+		
 		</div>
+		<nav aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        <?php if ($current_page > 1) { ?>
+            <li class="page-item">
+                <a class="page-link" href="?page=<?php echo ($current_page - 1); ?>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        <?php } ?>
+
+        <?php
+        $start_page = max(1, $current_page - 2);
+        $end_page = min($start_page + 4, $total_pages);
+
+        for ($page = $start_page; $page <= $end_page; $page++) {
+            ?>
+            <li class="page-item <?php if ($page == $current_page) echo '.$x.'active'.$x.'; ?>">
+                <a class="page-link" href="?page=<?php echo $page; ?>"><?php echo $page; ?></a>
+            </li>
+        <?php } ?>
+
+        <?php if ($current_page < $total_pages) { ?>
+            <li class="page-item">
+                <a class="page-link" href="?page=<?php echo ($current_page + 1); ?>" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        <?php } ?>
+    </ul>
+</nav>
 		</div>
 		</div>
 		</div>
